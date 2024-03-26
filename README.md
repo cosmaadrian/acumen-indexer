@@ -12,7 +12,7 @@ Coded with love and coffee ☕ by [Adrian Cosma](https://scholar.google.com/cita
 Currently, the way storing and accessing data is performed is inefficient, especially for begginer data scientists, each practitioner having its own way of doing things. It is not always possible to store the whole dataset in RAM memory, so a usual approach is resorting to splitting each training instance in a separate file. Datasets comprised of many images or small files are very difficult to handle in practice (i.e., transferring the dataset through ssh, zipping takes a long time). Many files in a single folder can lead to performance issues on certain filesystems and lead to crashes.
 
 ## But how?
-A simple way to overcome the issue of big dataset with many small instances is to store in RAM only the metadata and the index, and access big binary chunks of data on disk.
+A simple way to overcome the issue of big dataset with many small instances is to store in RAM only the metadata and the index, and use a random access mechanism for big binary chunks of data on disk.
 
 ## Say what?
 We make use of the native Python I/O operations of `f.seek()`, `f.read()` to read and write from large binary chunk files. We build a custom index based on byte offsets to access any training instance in O(1). Chunks can be `mmap()`-ed into RAM if memory is available to speed up I/O operations.
@@ -31,7 +31,7 @@ pip install -U git+https://github.com/cosmaadrian/acumen-indexer
 ```
 
 # Usage
-TDB
+TBD
 
 # Benchmarks
 
