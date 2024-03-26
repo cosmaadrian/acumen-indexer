@@ -8,4 +8,16 @@ Coded with love and coffee ☕ by [Adrian Cosma](https://scholar.google.com/cita
 
 ### Installation
 
+Install the pypi package via pip:
+
+```bash
+pip install -U acumenindexer
+```
+
+Alternatively, install directly via git:
+```bash
+# pip install -U git+
+```
+
+
 ### Usage
