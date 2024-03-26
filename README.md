@@ -31,7 +31,44 @@ pip install -U git+https://github.com/cosmaadrian/acumen-indexer
 ```
 
 # Usage
+
+## Building an index
+
 TBD
+
+## Reading from index
+
+```python
+import numpy as np
+import acumenindexer as ai
+
+the_index = ai.load_index('index.csv') # just a pd.DataFrame
+read_fn = ai.read_from_index(the_index, use_gzip = False, dtype = np.float16, in_memory = False)
+
+for i in range(10):
+    data = read_fn(i)
+    print(data) # contains both metadata and actual binary data
+```
+
+## Use with PyTorch Datasets
+
+```python
+from torch.utils.data import Dataset
+import acumenindexer as ai
+
+class CustomDataset(Dataset):
+    def __init__(self, index_path):
+        self.index = ai.load_index(index_path)
+        self.read_fn = ai.read_from_index(self.index, use_gzip = False, dtype = np.float16, in_memory = False)
+
+    def __len__(self):
+        return len(self.index)
+
+    def __getitem__(self, idx):
+        data = self.read_fn(idx)
+        return data
+
+```
 
 # Benchmarks
 
