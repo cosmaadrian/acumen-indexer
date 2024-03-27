@@ -12,22 +12,22 @@ def read_from_index(index, dtype = np.float16, use_gzip = False, chunk_paths = '
     mmapped_chunk_files = dict()
 
     if in_memory:
-        for chunk_name in index['chunk_name'].unique():
+        for chunk_name in index['ai:chunk_name'].unique():
             chunk_path = os.path.join(chunk_paths, chunk_name)
             with open(chunk_path, 'rb') as f:
                 mmapped_chunk_files[chunk_name] = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
     def __read(idx):
         row = index[idx]
-        chunk_name = os.path.join(chunk_paths, row['chunk_name'])
+        chunk_name = os.path.join(chunk_paths, row['ai:chunk_name'])
 
         if not in_memory:
             chunk_file = open(chunk_name, 'rb')
         else:
             chunk_file = mmapped_chunk_files[chunk_name]
 
-        chunk_file.seek(row['offset_bytes'])
-        data = chunk_file.read(row['size_bytes'])
+        chunk_file.seek(row['ai:offset_bytes'])
+        data = chunk_file.read(row['ai:size_bytes'])
 
         if not in_memory:
             chunk_file.close()
@@ -38,7 +38,7 @@ def read_from_index(index, dtype = np.float16, use_gzip = False, chunk_paths = '
         data = np.frombuffer(data, dtype = dtype).reshape(row['shape'])
 
         if metadata_keys is None:
-            metadata_keys = [k for k in row.keys() if k not in ['chunk_name', 'offset_bytes', 'size_bytes', 'shape']]
+            metadata_keys = [k for k in row.keys() if k not in ['ai:chunk_name', 'ai:offset_bytes', 'ai:size_bytes', 'ai:shape']]
 
         metadata = {k: row[k] for k in metadata_keys}
         return data, metadata
