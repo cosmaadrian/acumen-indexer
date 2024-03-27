@@ -43,7 +43,7 @@ import numpy as np
 import acumenindexer as ai
 
 the_index = ai.load_index('index.csv') # just a pd.DataFrame
-read_fn = ai.read_from_index(the_index, use_gzip = False, dtype = np.float16, in_memory = False)
+read_fn = ai.read_from_index(the_index)
 
 for i in range(10):
     data = read_fn(i)
@@ -59,7 +59,7 @@ import acumenindexer as ai
 class CustomDataset(Dataset):
     def __init__(self, index_path):
         self.index = ai.load_index(index_path)
-        self.read_fn = ai.read_from_index(self.index, use_gzip = False, dtype = np.float16, in_memory = False)
+        self.read_fn = ai.read_from_index(self.index)
 
     def __len__(self):
         return len(self.index)
@@ -69,6 +69,10 @@ class CustomDataset(Dataset):
         return data
 
 ```
+
+# Function Reference
+
+TBD some docs
 
 # Benchmarks
 
