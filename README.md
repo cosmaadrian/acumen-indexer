@@ -34,7 +34,27 @@ pip install -U git+https://github.com/cosmaadrian/acumen-indexer
 
 ## Building an index
 
-TBD
+```python
+
+def data_read_fn(path):
+    # read image from file
+    image = cv2.imread(path) # or something like this
+
+    # must return (data:numpy.ndarray, metadata:dict)
+    return image, x
+
+file_names = [x for x in os.listdir('images/')]
+
+ai.split_into_chunks(
+    data_list = file_names,
+    read_fn = data_read_fn,
+    output_path = 'my_data',
+    chunk_size_bytes = 5 * 1024 * 1024, #5MB
+    use_gzip = False,
+    dtype = np.float16,
+    n_jobs = 1,
+)
+```
 
 ## Reading from index
 
@@ -43,7 +63,10 @@ import numpy as np
 import acumenindexer as ai
 
 the_index = ai.load_index('index.csv') # just a pd.DataFrame
-read_fn = ai.read_from_index(the_index)
+
+# in_memory = False reads directly from chunk in O(1) using f.seek()
+# in_memory = True uses mmap to map the data into RAM
+read_fn = ai.read_from_index(the_index, dtype = np.float16, in_memory = True, use_gzip = False)
 
 for i in range(10):
     data = read_fn(i)
@@ -58,7 +81,7 @@ import acumenindexer as ai
 
 class CustomDataset(Dataset):
     def __init__(self, index_path):
-        self.index = ai.load_index(index_path)
+        self.index = ai.load_index(the_index, dtype = np.float16, in_memory = True, use_gzip = False)
         self.read_fn = ai.read_from_index(self.index)
 
     def __len__(self):
@@ -69,14 +92,6 @@ class CustomDataset(Dataset):
         return data
 
 ```
-
-# Function Reference
-
-TBD some docs
-
-# Benchmarks
-
-TBD
 
 # License
 This repository uses [MIT License](LICENSE).
