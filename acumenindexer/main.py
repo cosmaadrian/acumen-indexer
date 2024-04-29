@@ -15,13 +15,17 @@ def read_from_index(index, dtype = np.float16, use_gzip = False, chunk_paths = '
 
     if in_memory:
         for chunk_name in index['ai:chunk_name'].unique():
-            chunk_path = os.path.join(chunk_paths, chunk_name)
+            if chunk_paths is not None:
+                chunk_path = os.path.join(chunk_paths, chunk_name)
+
             with open(chunk_path, 'rb') as f:
                 mmapped_chunk_files[chunk_path] = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
     def __read(idx):
         row = index.iloc[idx]
-        chunk_name = os.path.join(chunk_paths, row['ai:chunk_name'])
+
+        if chunk_paths is not None:
+            chunk_name = os.path.join(chunk_paths, row['ai:chunk_name'])
 
         if not in_memory:
             chunk_file = open(chunk_name, 'rb')
