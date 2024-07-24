@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling", "numpy", "pandas"]
+build-backend = "hatchling.build"
+
+[project]
+name = "acumenindexer"
+version = "0.0.1"
+authors = [
+  { name="Adrian Cosma", email="cosma.i.adrian@gmail.com" },
+]
+description = "The AcumenIndexer"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/cosmaadrian/acumen-indexer"
+Issues = "https://github.com/cosmaadrian/acumen-indexer/issues"
