@@ -35,10 +35,14 @@ pip install -U git+https://github.com/cosmaadrian/acumen-indexer
 ## Building an index
 
 ```python
+import cv2
+import numpy as np
+import acumenindexer as ai
 
 def data_read_fn(path):
     # read image from file
     image = cv2.imread(path) # or something like this
+    x = {'path': path}
 
     # must return (data:numpy.ndarray, metadata:dict)
     return image, x
